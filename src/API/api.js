@@ -1,131 +1,118 @@
-
 import axios from "axios";
 
-const URL="http://localhost:8000";
-// const URL="https://bankserver-hao5.onrender.com";
+const baseURL = "http://localhost:8000";
+// const baseURL = "https://bankserver-hao5.onrender.com";
 
-export const addCash = async(data)=>{
-   console.log("hii");
-   try{
-    return await axios.post(`${URL}/cash`,data);
-   }
-   catch(error)
-   {
-    console.log("error while calling add cash api",error);
-   }
-}
+const instance = axios.create({
+  baseURL,
+});
 
-export const addChequeOnline =async(data)=>
-{
-   console.log(data);
-   try{
-      return await axios.post(`${URL}/online`,data);
-   }
-   catch(error)
-   {
-      console.log("error while calling addchequeonline api",error);
-   }
-}
+export const addCash = async (data) => {
+  try {
+    const response = await instance.post("/cash", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling addCash API:", error);
+    throw error; // Rethrow the error for the caller to handle
+  }
+};
 
-export const getCash =async()=>
-{
- try{
-   return await axios.get(`${URL}/allCash`);
- }
- catch(error)
- {
-   console.log("error while calling getCash api",error);
- }
-}
+export const addChequeOnline = async (data) => {
+  try {
+    const response = await instance.post("/online", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling addChequeOnline API:", error);
+    throw error;
+  }
+};
 
-export const getChequeOnline =async()=>
-{
-try{
-   return await axios.get(`${URL}/allChequeOnline`);
-}
-catch(error)
-{
-   console.log("error while calling getChequeOnline api",error);
-}
-}
+export const getCash = async () => {
+  try {
+    const response = await instance.get("/allCash");
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling getCash API:", error);
+    throw error;
+  }
+};
 
-export const addPersonal=async(data)=>
-{
- try{
- return await axios.post(`${URL}/personal`,data);
- }
- catch(error)
- {
-   console.log("error while calling add personal api",error);
- }
-}
+export const getChequeOnline = async () => {
+  try {
+    const response = await instance.get("/allChequeOnline");
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling getChequeOnline API:", error);
+    throw error;
+  }
+};
 
-export const addFinnacial =async (data)=>
-{
-   console.log(data);
-   try{
-      return await axios.post(`${URL}/finnacial`,data);
-   }
-   catch(error)
-   {
-      console.log("error while calling add finnacial api");
-   }
-}
-export const membership=async(data)=>
-{
-   try{
-      console.log(data);
-      return await axios.post(`${URL}/membership`,data);
-   }
-   catch(error)
-   {
-      console.log("error while calling membership api ");
-   }
-}
-export const getmembershipNo =async()=>
-{
-   try{
-      return await axios.get(`${URL}/getmembershipnumber`);
-   }
-   catch(error)
-   {
-      console.log("error while calling getmembership number api");
-   }
-}
+export const addPersonal = async (data) => {
+  try {
+    const response = await instance.post("/personal", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling addPersonal API:", error);
+    throw error;
+  }
+};
 
-export const addpromotors =async(data)=>
-{
-   try{
-   return await axios.post(`${URL}/addpromotors`,data);
-   }
-   catch(error)
-   {
-      console.log("error while calling add promotors api");
-   }
-}
+export const addFinnacial = async (data) => {
+  try {
+    const response = await instance.post("/finnacial", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling addFinnacial API:", error);
+    throw error;
+  }
+};
 
-export const account=async(data)=>
-{
-   try{
-      return await axios.post(`${URL}/account`,data);
-   }
-   catch(error)
-   {
-      console.log("error while calling account api");
-   }
-}
+export const membership = async (data) => {
+  try {
+    const response = await instance.post("/membership", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling membership API:", error);
+    throw error;
+  }
+};
 
-export const getaccount=async()=>
-{
-   try{
-      
-      
-      return await axios.get(`${URL}/getaccount`);
-   }
-   catch(error)
-   {
-      console.log("error while calling getaccount api");
-      console.log(error);
-   }
-}
+export const getmembershipNo = async () => {
+  try {
+    const response = await instance.get("/getmembershipnumber");
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling getmembershipNo API:", error);
+    throw error;
+  }
+};
 
+export const addpromotors = async (data) => {
+  try {
+    const response = await instance.post("/addpromotors", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling addpromotors API:", error);
+    throw error;
+  }
+};
+
+export const account = async (data) => {
+  try {
+    const response = await instance.post("/account", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling account API:", error);
+    throw error;
+  }
+};
+
+export const getaccount = async () => {
+  try {
+    const response = await instance.get("/getaccount");
+    return response.data;
+  } catch (error) {
+    console.error("Error while calling getaccount API:", error);
+    throw error;
+  }
+};

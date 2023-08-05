@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NavbarWithCTAButton from "../NavBar/NavBar";
 import { addpromotors } from "../../API/api";
 
 const Motor = () => {
@@ -156,448 +157,454 @@ const Motor = () => {
   };
 
   return (
-    <>
-      <h1 className="flex text-5xl pt-28 mb-8 font-medium text-slate-800 ml-16">
-        Promotor
-      </h1>
-      <Line />
-      <form className="flex flex-col">
-        <div className="flex flex-row w-11/12 mx-auto">
-          <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
-            Account
-          </p>
-          <div className="flex flex-col gap-10 w-full">
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  id="firstnames"
-                  className="laa font-bold text-lg text-gray-700"
-                >
-                  {" "}
-                  First Name<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="firstName"
-                  required
-                  pattern="[a-zA-Z]{2}"
-                />
-                <span className="error">{getError.firstName}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  Middle Name:
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="middleName"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="lastnames"
-                >
-                  Last Name<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="lastName"
-                  required
-                />
-                <span className="error">{getError.lastName}</span>
-              </div>
-              <div>
-                <label id="genders" className="font-bold text-lg text-gray-700">
-                  Gender<span>*</span>
-                </label>
-                <div className="flex flex-row gap-x-2">
+    <div>
+      <NavbarWithCTAButton />
+      <>
+        <h1 className="flex text-5xl pt-28 mb-8 font-medium text-slate-800 ml-16">
+          Promotor
+        </h1>
+        <Line />
+        <form className="flex flex-col">
+          <div className="flex flex-row w-11/12 mx-auto">
+            <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
+              Account
+            </p>
+            <div className="flex flex-col gap-10 w-full">
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    id="firstnames"
+                    className="laa font-bold text-lg text-gray-700"
+                  >
+                    {" "}
+                    First Name<span>*</span>
+                  </label>
                   <input
-                    defaultChecked
-                    className="pro"
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
                     onChange={(e) => promotors(e)}
-                    type="radio"
-                    name="gender"
-                    value="male"
+                    type="text"
+                    name="firstName"
                     required
+                    pattern="[a-zA-Z]{2}"
                   />
-
-                  <label className="ra">M</label>
+                  <span className="error">{getError.firstName}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Middle Name:
+                  </label>
                   <input
-                    className="pro"
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                     onChange={(e) => promotors(e)}
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    required
+                    type="text"
+                    name="middleName"
                   />
-
-                  <label className="ra">F</label>
-                  <input
-                    className="pro"
-                    onChange={(e) => promotors(e)}
-                    type="radio"
-                    name="gender"
-                    value="trans"
-                    required
-                  />
-                  <label className="ra">T</label>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="dobs"
-                >
-                  Date of Birth<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="date"
-                  name="DOB"
-                  required
-                />
-                <span className="error">{getError.DOB}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label
-                  id="martials"
-                  className="font-bold text-lg text-gray-700"
-                >
-                  Marital status<span>*</span>
-                </label>
-                <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="lastnames"
+                  >
+                    Last Name<span>*</span>
+                  </label>
                   <input
-                    className="pro"
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
                     onChange={(e) => promotors(e)}
-                    type="radio"
-                    name="martialstatus"
-                    value="married"
+                    type="text"
+                    name="lastName"
                     required
                   />
-                  <label>married</label>
-                  <input
-                    className="pro"
-                    onChange={(e) => promotors(e)}
-                    type="radio"
-                    name="martialstatus"
-                    value="unmarried"
-                    required
-                  />
-                  <label>unmarried</label>
+                  <span className="error">{getError.lastName}</span>
                 </div>
-
-                {getpro.martialstatus === "married" ? (
-                  <>
-                    <label className=" font-bold text-lg text-gray-700">
-                      Spouse Name<span>*</span>
-                    </label>
+                <div>
+                  <label
+                    id="genders"
+                    className="font-bold text-lg text-gray-700"
+                  >
+                    Gender<span>*</span>
+                  </label>
+                  <div className="flex flex-row gap-x-2">
                     <input
-                      className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      defaultChecked
+                      className="pro"
                       onChange={(e) => promotors(e)}
-                      type="text"
-                      name="spouse"
+                      type="radio"
+                      name="gender"
+                      value="male"
                       required
                     />
-                  </>
-                ) : (
-                  <></>
-                )}
+
+                    <label className="ra">M</label>
+                    <input
+                      className="pro"
+                      onChange={(e) => promotors(e)}
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      required
+                    />
+
+                    <label className="ra">F</label>
+                    <input
+                      className="pro"
+                      onChange={(e) => promotors(e)}
+                      type="radio"
+                      name="gender"
+                      value="trans"
+                      required
+                    />
+                    <label className="ra">T</label>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="fathernames"
-                >
-                  Father Name<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="fatherName"
-                  required
-                  pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
-                />
-                <span className="error">{getError.fatherName}</span>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="dobs"
+                  >
+                    Date of Birth<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="date"
+                    name="DOB"
+                    required
+                  />
+                  <span className="error">{getError.DOB}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label
+                    id="martials"
+                    className="font-bold text-lg text-gray-700"
+                  >
+                    Marital status<span>*</span>
+                  </label>
+                  <div className="flex flex-row gap-2">
+                    <input
+                      className="pro"
+                      onChange={(e) => promotors(e)}
+                      type="radio"
+                      name="martialstatus"
+                      value="married"
+                      required
+                    />
+                    <label>married</label>
+                    <input
+                      className="pro"
+                      onChange={(e) => promotors(e)}
+                      type="radio"
+                      name="martialstatus"
+                      value="unmarried"
+                      required
+                    />
+                    <label>unmarried</label>
+                  </div>
+
+                  {getpro.martialstatus === "married" ? (
+                    <>
+                      <label className=" font-bold text-lg text-gray-700">
+                        Spouse Name<span>*</span>
+                      </label>
+                      <input
+                        className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        onChange={(e) => promotors(e)}
+                        type="text"
+                        name="spouse"
+                        required
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="mothernames"
-                >
-                  Mother Name<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="motherName"
-                  pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
-                  required
-                />
-                <span className="error">{getError.motherName}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <Line />
-        <div className="flex flex-row w-11/12 mx-auto">
-          <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
-            Contact Details
-          </p>
-          <div className="flex flex-col gap-10 w-full">
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="emails"
-                >
-                  email<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="email"
-                  name="email"
-                  required
-                />
-                <span className="error">{getError.email}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="mobiles"
-                >
-                  Mobile<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="number"
-                  name="number"
-                  pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
-                  required
-                />
-                <span className="error">{getError.number}</span>
-              </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="aadhars"
-                >
-                  Aadhar NO.<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="number"
-                  name="aadhar"
-                  pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
-                  required
-                />
-                <span className="error">{getError.aadhar}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="pans"
-                >
-                  Pan No.<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="pan"
-                  pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
-                  required
-                />
-                <span className="error">{getError.pan}</span>
-              </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="voters"
-                >
-                  voter id.<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="voter"
-                  pattern="^([a-zA-Z]){3}([0-9]){7}?$"
-                  required
-                />
-                <span className="error">{getError.voter}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label
-                  className="laa font-bold text-lg text-gray-700"
-                  id="rations"
-                >
-                  Ration No.<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="ration"
-                  pattern="^([a-zA-Z0-9]){8,12}\s*$"
-                  required
-                />
-                <span className="error">{getError.ration}</span>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="fathernames"
+                  >
+                    Father Name<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="fatherName"
+                    required
+                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                  />
+                  <span className="error">{getError.fatherName}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="mothernames"
+                  >
+                    Mother Name<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="motherName"
+                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                    required
+                  />
+                  <span className="error">{getError.motherName}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <Line />
-        <div className="flex flex-row w-11/12 mx-auto">
-          <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
-            Address
-          </p>
-          <div className="flex flex-col gap-10 w-full">
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  Areal Locality<span>*</span>:
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="areal"
-                  required
-                />
-                <span className="error">{getError.areal}</span>
+          <Line />
+          <div className="flex flex-row w-11/12 mx-auto">
+            <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
+              Contact Details
+            </p>
+            <div className="flex flex-col gap-10 w-full">
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="emails"
+                  >
+                    email<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="email"
+                    name="email"
+                    required
+                  />
+                  <span className="error">{getError.email}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="mobiles"
+                  >
+                    Mobile<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="number"
+                    name="number"
+                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
+                    required
+                  />
+                  <span className="error">{getError.number}</span>
+                </div>
               </div>
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  Land Mark:
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="Landmark"
-                  required
-                />
-                <span className="error">{getError.Landmark}</span>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="aadhars"
+                  >
+                    Aadhar NO.<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="number"
+                    name="aadhar"
+                    pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
+                    required
+                  />
+                  <span className="error">{getError.aadhar}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="pans"
+                  >
+                    Pan No.<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="pan"
+                    pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
+                    required
+                  />
+                  <span className="error">{getError.pan}</span>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  Post<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="post"
-                  required
-                />
-                <span className="error">{getError.post}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  District<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="dist"
-                  required
-                />
-                <span className="error">{getError.dist}</span>
-              </div>
-            </div>
-            <div className="flex flex-row gap-24">
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  State<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="text"
-                  name="state"
-                  required
-                />
-                <span className="error">{getError.state}</span>
-              </div>
-              <div className="flex flex-col w-2/5">
-                <label className="laa font-bold text-lg text-gray-700">
-                  Pin Code<span>*</span>
-                </label>
-                <input
-                  className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => promotors(e)}
-                  type="number"
-                  name="pincode"
-                  pattern="^[1-9]{1}\d{2}\s?\d{3}$"
-                  required
-                />
-                <span className="error">{getError.pincode}</span>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="voters"
+                  >
+                    voter id.<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="voter"
+                    pattern="^([a-zA-Z]){3}([0-9]){7}?$"
+                    required
+                  />
+                  <span className="error">{getError.voter}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label
+                    className="laa font-bold text-lg text-gray-700"
+                    id="rations"
+                  >
+                    Ration No.<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="ration"
+                    pattern="^([a-zA-Z0-9]){8,12}\s*$"
+                    required
+                  />
+                  <span className="error">{getError.ration}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex gap-0 items-end self-end justify-end mb-20  mr-44 mt-16">
-          <input
-            onClick={() => {}}
-            type="button"
-            value="CANCEL"
-            className=" justify-end cursor-pointer  self-end items-end mr-12 tracking-wider  text-gray-500 text-xl leading-loose font-bold"
-          />
-          <input
-            onClick={() => {
-              submit();
-              window.location.reload();
-            }}
-            type="button"
-            value="SUBMIT"
-            className="bg-red-600 cursor-pointer tracking-wider font-bold w-fit justify-end self-end items-end rounded-lg shadow-xl text-gray-50 px-6 py-1.5 text-xl"
-          />
-        </div>
-      </form>
-    </>
+          <Line />
+          <div className="flex flex-row w-11/12 mx-auto">
+            <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
+              Address
+            </p>
+            <div className="flex flex-col gap-10 w-full">
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Areal Locality<span>*</span>:
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="areal"
+                    required
+                  />
+                  <span className="error">{getError.areal}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Land Mark:
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="Landmark"
+                    required
+                  />
+                  <span className="error">{getError.Landmark}</span>
+                </div>
+              </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Post<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="post"
+                    required
+                  />
+                  <span className="error">{getError.post}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    District<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="dist"
+                    required
+                  />
+                  <span className="error">{getError.dist}</span>
+                </div>
+              </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    State<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="text"
+                    name="state"
+                    required
+                  />
+                  <span className="error">{getError.state}</span>
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Pin Code<span>*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onBlur={(e) => handleError(e)}
+                    onChange={(e) => promotors(e)}
+                    type="number"
+                    name="pincode"
+                    pattern="^[1-9]{1}\d{2}\s?\d{3}$"
+                    required
+                  />
+                  <span className="error">{getError.pincode}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-0 items-end self-end justify-end mb-20  mr-44 mt-16">
+            <input
+              onClick={() => {}}
+              type="button"
+              value="CANCEL"
+              className=" justify-end cursor-pointer  self-end items-end mr-12 tracking-wider  text-gray-500 text-xl leading-loose font-bold"
+            />
+            <input
+              onClick={() => {
+                submit();
+                window.location.reload();
+              }}
+              type="button"
+              value="SUBMIT"
+              className="bg-red-600 cursor-pointer tracking-wider font-bold w-fit justify-end self-end items-end rounded-lg shadow-xl text-gray-50 px-6 py-1.5 text-xl"
+            />
+          </div>
+        </form>
+      </>
+    </div>
   );
 };
 export default Motor;
