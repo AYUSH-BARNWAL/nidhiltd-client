@@ -92,8 +92,15 @@ export const addpromotors = async (data) => {
     const response = await instance.post("/addpromotors", data);
     return response.data;
   } catch (error) {
-    console.error("Error while calling addpromotors API:", error);
-    throw error;
+    if (error.response) {
+      console.error("Server responded with:", error.response.status);
+      console.log(error);
+      console.log(data);
+    } else if (error.request) {
+      console.error("Request was made but no response was received");
+    } else {
+      console.error("Error during request setup:", error.message);
+    }
   }
 };
 

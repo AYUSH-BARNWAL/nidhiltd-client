@@ -1,7 +1,7 @@
 import React from "react";
 import NavbarWithCTAButton from "../NavBar/NavBar";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { account } from "../../API/api";
 // eslint-disable-next-line no-unused-vars
 import { useState, useEffect } from "react";
 
@@ -18,14 +18,12 @@ const AccOpeningForm = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post("/account", accFormData);
-      console.log("Data sent successfully:", response.data);
-      toast.success("Data sent successfully");
+      await account(accFormData);
+      toast.success("Account Created Successfully");
+      window.location.reload();
     } catch (error) {
-      console.error("Error sending data:", error);
-      toast.error("Error sending data");
+      console.log(error);
     }
   };
 

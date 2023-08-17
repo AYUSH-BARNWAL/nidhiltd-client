@@ -1,7 +1,7 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-useless-escape */
 import {
   addPersonal,
-  addFinnacial,
+  getaccount,
   addCash,
   addChequeOnline,
   membership,
@@ -9,39 +9,89 @@ import {
 } from "../../API/api";
 import { useState, useEffect } from "react";
 import NavbarWithCTAButton from "../NavBar/NavBar";
+import { toast } from "react-toastify";
 
 const Member = () => {
-  const [getpersonal, setpersonal] = useState({});
-  const [getfinancial, setfinancial] = useState({});
   const [Nominee1, setdefault1] = useState(false);
   const [Nominee2, setdefault2] = useState(false);
   const [Nominee3, setdefault3] = useState(false);
   const [getpaymode, setpaymode] = useState({ payMode: "cash" });
-  const [getmember, setmember] = useState({});
-  const [getmem, setmem] = useState([]);
   const [getError, setError] = useState({});
+  const [banks, setBanks] = useState([]);
 
-  const personal = async () => {
-    console.log("hii");
-    let a = Object.assign(Nominee1, Nominee2);
-    let b = Object.assign(a, Nominee3);
-    let c = Object.assign(b, getpersonal);
-    await addPersonal(c);
-  };
-  const finnacial = async () => {
-    console.log(getfinancial);
-    await addFinnacial(getfinancial);
-  };
+  const [personal, setPersonal] = useState({
+    membership: "",
+    title: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birth: "",
+    father: "",
+    mother: "",
+    gender: "",
+    martial: "",
+    spouse: "",
+    email: "",
+    phone: "",
+    aadhar: "",
+    pan: "",
+    voter: "",
+    ration: "",
+    area: "",
+    landmark: "",
+    post: "",
+    dist: "",
+    state: "",
+    pin: "",
 
-  const setp = (e) => {
-    setpersonal({ ...getpersonal, [e.target.name]: e.target.value });
-    console.log(getpersonal);
-  };
-  const setf = (e) => {
-    setfinancial({ ...getfinancial, [e.target.name]: e.target.value });
-    console.log(getfinancial);
-  };
-  useEffect(() => {}, []);
+    name1: "",
+    aadhar1: "",
+    email1: "",
+    pan1: "",
+    phone1: "",
+    relation1: "",
+    voter1: "",
+    ration1: "",
+
+    name2: "",
+    aadhar2: "",
+    email2: "",
+    pan2: "",
+    phone2: "",
+    relation2: "",
+    voter2: "",
+    ration2: "",
+
+    name3: "",
+    aadhar3: "",
+    email3: "",
+    pan3: "",
+    phone3: "",
+    relation3: "",
+    voter3: "",
+    ration3: "",
+  });
+
+  const [payment, setPayment] = useState({
+    selectedBank: "",
+    sharePurchaseAmount: "",
+    membershipCharge: "",
+    promotor: "",
+    numberOfShares: "",
+  });
+
+  useEffect(() => {
+    console.log("Fetching banks...");
+    getaccount()
+      .then((res) => {
+        console.log("Bank data fetched:", res);
+        setBanks(res);
+      })
+      .catch((err) => {
+        console.log("Error fetching banks:", err);
+      });
+  }, []);
+
   const nominee1 = () => {
     if (Nominee1 === true) {
       setdefault1(false);
@@ -63,51 +113,6 @@ const Member = () => {
       setdefault3(true);
     }
   };
-  const pay = (e) => {
-    setpaymode({ ...getpaymode, [e.target.name]: e.target.value });
-    console.log(getpaymode);
-  };
-  const payment = async () => {
-    let memnumber = { membershipnumber: memc[0].toString() };
-    console.log("hello from payment");
-    console.log(memnumber);
-    let paymodenumber = Object.assign(memnumber, getpaymode);
-    //let paymodenumber={...getpaymode,...memnumber};
-    setpaymode(paymodenumber);
-    console.log("hello from member payment");
-    console.log(paymodenumber);
-
-    if (getpaymode.payMode === "cash") {
-      await addCash(paymodenumber);
-    } else {
-      await addChequeOnline(paymodenumber);
-    }
-    mem();
-  };
-  const setm = (e) => {
-    setmember({ [e.target.name]: e.target.value });
-  };
-  const memb = async () => {
-    console.log(getmember);
-    await membership(getmember);
-  };
-
-  useEffect(() => {
-    console.log("before reloading");
-    mem();
-
-    console.log("reloaded");
-  }, []);
-
-  const mem = async () => {
-    let b = await getmembershipNo();
-    setmem(b.data);
-  };
-  // let memc = getmem.map((k) => k._id);
-  let memc = [];
-  console.log("hii");
-  console.log(memc);
-  console.log(memc[0]);
 
   const handleError = (e) => {
     if (e.target.name === "firstName" || e.target.name === "lastName") {
@@ -116,11 +121,11 @@ const Member = () => {
         setError({ ...getError, [e.target.name]: " name required" });
         console.log(getError.firstName);
         console.log("null value");
-      } else if (e.target.value.length < 2 || e.target.value.length > 15) {
+      } else if (!p.test(e.target.value)) {
         setError({
           ...getError,
           [e.target.name]:
-            "name should be of more than 2 and less than 15 characters",
+            "name should be of more than 2 and less than 10 characters",
         });
         console.log(getError.firstName);
         console.log("pattern");
@@ -147,7 +152,7 @@ const Member = () => {
         setError({ ...getError, [e.target.name]: "" });
       }
     } else if (e.target.name === "email") {
-      let p = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      let p = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
       if (e.target.value === "") {
         setError({ ...getError, [e.target.name]: "enter email" });
       } else if (!p.test(e.target.value)) {
@@ -159,7 +164,7 @@ const Member = () => {
         setError({ ...getError, [e.target.name]: "" });
       }
     } else if (e.target.name === "phone") {
-      let p = /^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/;
+      let p = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       if (e.target.value === "") {
         setError({ ...getError, [e.target.name]: "enter phone number" });
       } else if (!p.test(e.target.value)) {
@@ -242,6 +247,36 @@ const Member = () => {
       }
     }
   };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await addPersonal(personal);
+      // if (getpaymode.payMode === "cash") {
+      //   await addCash(paymodenumber);
+      // } else {
+      //   await addChequeOnline(paymodenumber);
+      // }
+      toast.success("Account Created Successfully");
+    } catch (err) {
+      console.log(err);
+    }
+    // window.location.reload();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPersonal((prevData) => ({ ...prevData, [name]: value }));
+    console.log(personal);
+  };
+
+  const handlePayChange = (e) => {
+    setpaymode({ payMode: e.target.value });
+    const { name, value } = e.target;
+    setPayment((prevData) => ({ ...prevData, [name]: value }));
+    console.log(payment);
+  };
+
   const Line = () => {
     return <div className="w-11/12 mx-auto h-[1.5px] my-10 bg-gray-400" />;
   };
@@ -255,7 +290,7 @@ const Member = () => {
           MEMBER DETAILS
         </div>
         <Line />
-        <form className="flex flex-col gap-y-8">
+        <form className="flex flex-col gap-y-8" onSubmit={submitHandler}>
           <div className="flex flex-row w-11/12 mx-auto">
             <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
               Personal Details
@@ -268,21 +303,24 @@ const Member = () => {
                   </label>
                   <input
                     type="text"
-                    value={memc}
+                    value={personal.membershipnumber}
                     name="membershipnumber"
+                    onChange={handleInputChange}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    disabled
                   />
                 </div>
 
                 <div className="flex  w-2/5">
-                  <label className="font-bold text-lg whitespace-nowrap text-gray-700">
+                  <label
+                    className="font-bold text-lg whitespace-nowrap text-gray-700"
+                    value={personal.title}
+                    onChange={handleInputChange}
+                  >
                     Title <span className="text-red-600">*</span>
                   </label>
 
                   <input
-                    // onChange={(e) => data(e)}
-                    defaultChecked
+                    onChange={handleInputChange}
                     value="mr"
                     type="radio"
                     name="title"
@@ -291,7 +329,7 @@ const Member = () => {
                   />
                   <label className="text-xl font-bold text-gray-700">Mr.</label>
                   <input
-                    // onChange={(e) => data(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="title"
                     className="translate-y-2 mx-1 ml-3 scale-90"
@@ -307,12 +345,13 @@ const Member = () => {
                     First Name <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="firstName"
-                    pattern="[a-zA-Z]{2}"
+                    // pattern="[a-zA-Z]{2}"
                     required
+                    value={personal.firstName}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error text-red-600">{getError.name}</span>
@@ -322,9 +361,10 @@ const Member = () => {
                     Middle Name
                   </label>
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="middleName"
+                    value={personal.middleName}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error text-red-600">{getError.IFSC}</span>
@@ -336,10 +376,11 @@ const Member = () => {
                     Last Name <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="lastName"
-                    onBlur={(e) => handleError(e)}
+                    value={personal.lastName}
+                    //onBlur={(e) => handleError(e)}
                     required
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -351,11 +392,12 @@ const Member = () => {
                     Date of Birth <span className="text-red-600">*</span>
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="date"
-                    name="date"
+                    name="birth"
                     required
+                    value={personal.birth}
                     className="rounded-md bg-slate-300 text-gray-700 cursor-pointer font-semibold"
                   />
                 </div>
@@ -366,12 +408,13 @@ const Member = () => {
                     Father's Name <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
-                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                     type="text"
                     name="father"
                     required
+                    value={personal.father}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error text-red-600">{getError.father}</span>
@@ -381,12 +424,13 @@ const Member = () => {
                     Mother's Name <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
-                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                     type="text"
                     name="mother"
                     required
+                    value={personal.mother}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error text-red-600">{getError.mother}</span>
@@ -394,13 +438,16 @@ const Member = () => {
               </div>
               <div className="flex flex-row gap-24">
                 <div className="flex  w-2/5">
-                  <label className="font-bold text-lg whitespace-nowrap text-gray-700">
+                  <label
+                    className="font-bold text-lg whitespace-nowrap text-gray-700"
+                    value={personal.gender}
+                    onChange={handleInputChange}
+                  >
                     Gender <span className="text-red-600">*</span>
                   </label>
 
                   <input
-                    defaultChecked
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="gender"
                     value="Male"
@@ -411,7 +458,7 @@ const Member = () => {
                     Male
                   </label>
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="gender"
                     value="Female"
@@ -422,7 +469,7 @@ const Member = () => {
                     Female
                   </label>
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="gender"
                     value="Transgender"
@@ -434,12 +481,16 @@ const Member = () => {
                   </label>
                 </div>
                 <div className="flex  w-2/5">
-                  <label className="font-bold text-lg whitespace-nowrap text-gray-700">
+                  <label
+                    className="font-bold text-lg whitespace-nowrap text-gray-700"
+                    value={personal.martial}
+                    onChange={handleInputChange}
+                  >
                     Marital Status <span className="text-red-600">*</span>
                   </label>
 
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="martial"
                     value="married"
@@ -450,7 +501,7 @@ const Member = () => {
                   </label>
                   <input
                     defaultChecked
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="radio"
                     name="martial"
                     value="unmarried"
@@ -461,6 +512,22 @@ const Member = () => {
                   </label>
                 </div>
               </div>
+              {personal.martial === "married" ? (
+                <>
+                  <div className="font-bold text-lg text-gray-700">
+                    Spouse Name
+                  </div>
+                  <div className="">
+                    <input
+                      onChange={handleInputChange}
+                      type="text"
+                      name="spouse"
+                    />
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
           <Line />
@@ -475,11 +542,12 @@ const Member = () => {
                     Email <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="email"
                     name="email"
                     required
+                    value={personal.email}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.email}</span>
@@ -489,12 +557,13 @@ const Member = () => {
                     Mobile Number <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
-                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
                     type="tel"
                     name="phone"
                     required
+                    value={personal.phone}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.phone}</span>
@@ -506,12 +575,13 @@ const Member = () => {
                     Aadhar Number <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setf(e)}
-                    pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
                     type="number"
                     name="aadhar"
                     required
+                    value={personal.aadhar}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.aadhar}</span>
@@ -521,12 +591,13 @@ const Member = () => {
                     PAN Number <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setf(e)}
-                    pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
-                    type="number"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
+                    type="text"
                     name="pan"
                     required
+                    value={personal.pan}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.pan}</span>
@@ -538,13 +609,14 @@ const Member = () => {
                     Voter ID Number <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setf(e)}
-                    pattern="^([a-zA-Z]){3}([0-9]){7}?$"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^([a-zA-Z]){3}([0-9]){7}?$"
                     type="text"
                     name="voter"
                     id=""
                     required
+                    value={personal.voter}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.voter}</span>
@@ -554,12 +626,13 @@ const Member = () => {
                     Ration Card Number <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setf(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     pattern="^([a-zA-Z0-9]){8,12}\s*$"
                     type="Number"
                     name="ration"
                     required
+                    value={personal.ration}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.ration}</span>
@@ -579,11 +652,12 @@ const Member = () => {
                     Area Locality <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="text"
-                    name="areal"
+                    name="area"
                     required
+                    value={personal.area}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.areal}</span>
@@ -593,9 +667,10 @@ const Member = () => {
                     Landmark (if any){" "}
                   </label>
                   <input
-                    onChange={(e) => setp(e)}
+                    onChange={handleInputChange}
                     type="text"
-                    name="Landmark"
+                    name="landmark"
+                    value={personal.landmark}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                 </div>
@@ -606,11 +681,12 @@ const Member = () => {
                     Post <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="post"
                     required
+                    value={personal.post}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.post}</span>
@@ -620,11 +696,12 @@ const Member = () => {
                     District <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="dist"
                     required
+                    value={personal.dist}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.dist}</span>
@@ -636,11 +713,12 @@ const Member = () => {
                     State <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="state"
                     required
+                    value={personal.state}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.state}</span>
@@ -650,12 +728,13 @@ const Member = () => {
                     Pin Code <span className="text-red-600">*</span>{" "}
                   </label>
                   <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => setp(e)}
-                    pattern="^[1-9]{1}\d{2}\s?\d{3}$"
-                    type="number"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    // pattern="^[1-9]{1}\d{2}\s?\d{3}$"
+                    type="text"
                     name="pincode"
                     required
+                    value={personal.pincode}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error">{getError.pincode}</span>
@@ -669,89 +748,533 @@ const Member = () => {
               Nominee Details
             </p>
             <div className="flex flex-col gap-y-4 w-full">
+              <div className="w-[89%]">
+                <input
+                  onClick={() => nominee1()}
+                  className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold py-2.5 border border-black"
+                  type="button"
+                  name="nominee1"
+                  value="Add Nominee 1"
+                />
+              </div>
+
+              {Nominee1 === true ? (
+                <div className="flex flex-col gap-y-2">
+                  <div className="flex flex-row gap-24">
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Name:
+                      </label>
+                      <input
+                        onChange={handleInputChange}
+                        type="text"
+                        name="name1"
+                        value={personal.name1}
+                        placeholder="Enter Name for Nominee 1"
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      />
+                    </div>
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Relation:
+                      </label>
+                      <input
+                        onChange={handleInputChange}
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        type="text"
+                        value={personal.relation1}
+                        name="relation1"
+                        placeholder="Enter Relation"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-24">
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Email
+                      </label>
+                      <input
+                        onChange={handleInputChange}
+                        type="email"
+                        name="email1"
+                        value={personal.email1}
+                        placeholder="Enter Email of Nominee 1"
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      />
+                    </div>
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Mobile Number
+                      </label>
+                      <input
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        onChange={handleInputChange}
+                        type="tel"
+                        name="phone1"
+                        value={personal.phone1}
+                        placeholder="Enter Mobile Number of Nominee 1"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-24">
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Aadhar Number
+                      </label>
+                      <input
+                        onChange={handleInputChange}
+                        type="number"
+                        name="aadhar1"
+                        value={personal.aadhar1}
+                        placeholder="Enter Aadhar Number of Nominee 1"
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      />
+                    </div>
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Pan Number
+                      </label>
+                      <input
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        onChange={handleInputChange}
+                        type="text"
+                        name="pan1"
+                        value={personal.pan1}
+                        placeholder="Enter Pan Number of Nominee 1"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-24">
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Ration Card Number
+                      </label>
+                      <input
+                        onChange={handleInputChange}
+                        type="text"
+                        value={personal.ration1}
+                        name="ration1"
+                        placeholder="Enter Ration Card Number of Nominee 1"
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      />
+                    </div>
+                    <div className="flex flex-col w-2/5">
+                      <label className="font-bold text-lg text-gray-700">
+                        Voter ID
+                      </label>
+                      <input
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        onChange={handleInputChange}
+                        type="text"
+                        name="voter1"
+                        value={personal.voter1}
+                        placeholder="Enter Voter ID of Nominee 1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="w-[89%]">
+                <input
+                  onClick={() => nominee2()}
+                  className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold py-2.5 border border-black"
+                  type="button"
+                  name="nominee2"
+                  value="Add Nominee 2"
+                />
+
+                {Nominee1 === true && Nominee2 === true ? (
+                  <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Name
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="text"
+                          name="name2"
+                          placeholder="Enter Name for Nominee 2"
+                          value={personal.name2}
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Relation
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          type="text"
+                          name="relation2"
+                          value={personal.relation2}
+                          placeholder="Enter Relation"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Email
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="email"
+                          name="email2"
+                          value={personal.email2}
+                          placeholder="Enter Email of Nominee 2"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Mobile Number
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="tel"
+                          name="phone2"
+                          value={personal.phone2}
+                          placeholder="Enter Mobile Number of Nominee 2"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Aadhar Number
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="number"
+                          name="aadhar2"
+                          value={personal.aadhar2}
+                          placeholder="Enter Aadhar Number of Nominee 2"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Pan Number
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="text"
+                          name="pan2"
+                          value={personal.pan2}
+                          placeholder="Enter Pan Number of Nominee 2"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Ration Card Number
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="text"
+                          name="ration2"
+                          value={personal.ration2}
+                          placeholder="Enter Ration Card Number of Nominee 2"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Voter ID
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="text"
+                          name="voter2"
+                          value={personal.voter2}
+                          placeholder="Enter Voter ID of Nominee 2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="w-[89%]">
+                <input
+                  onClick={() => nominee3()}
+                  className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold py-2.5 border border-black"
+                  type="button"
+                  name="nominee3"
+                  value="Add Nominee 3"
+                />
+
+                {Nominee1 === true && Nominee2 === true && Nominee3 === true ? (
+                  <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Name
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="text"
+                          name="name3"
+                          value={personal.name3}
+                          placeholder="Enter Name for Nominee 3"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Relation
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          type="text"
+                          name="relation3"
+                          value={personal.relation3}
+                          placeholder="Enter Relation"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Email
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="email"
+                          name="email3"
+                          value={personal.email3}
+                          placeholder="Enter Email of Nominee 3"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Mobile Number
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="tel"
+                          name="phone3"
+                          value={personal.phone3}
+                          placeholder="Enter Mobile Number of Nominee 3"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Aadhar Number
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="number"
+                          name="aadhar3"
+                          value={personal.aadhar3}
+                          placeholder="Enter Aadhar Number of Nominee 3"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Pan Number
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="text"
+                          name="pan3"
+                          value={personal.pan3}
+                          placeholder="Enter Pan Number of Nominee 3"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-row gap-24">
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Ration Card Number
+                        </label>
+                        <input
+                          onChange={handleInputChange}
+                          type="text"
+                          name="ration3"
+                          value={personal.ration3}
+                          placeholder="Enter Ration Card Number of Nominee 3"
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                        />
+                      </div>
+                      <div className="flex flex-col w-2/5">
+                        <label className="font-bold text-lg text-gray-700">
+                          Voter ID
+                        </label>
+                        <input
+                          className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                          onChange={handleInputChange}
+                          type="text"
+                          name="voter3"
+                          value={personal.voter3}
+                          placeholder="Enter Voter ID of Nominee 3"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Repeat similar structure for nominee2 and nominee3 */}
+            </div>
+          </div>
+          <Line />
+          <div className="flex flex-row w-11/12 mx-auto">
+            <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
+              Membership Details
+            </p>
+            <div className="flex flex-col gap-y-4 w-full">
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
+                  <label className="font-bold text-lg text-gray-700">
+                    Share Purchase Amount{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
                   <input
-                    onClick={() => nominee1()}
-                    className="nominee text-xl font-bold text-gray-700"
-                    type="button"
-                    name="nominee1"
-                    // value="Add Nominee1"
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    type="text"
+                    name="sharePurchaseAmount"
+                    required
+                    placeholder="Enter Share Purchase Amount"
+                    className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                  />
+                  {/* <span className="error">{getError.areal}</span> */}
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="font-bold text-lg text-gray-700">
+                    Number of Shares <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    onChange={handleInputChange}
+                    type="text"
+                    name="numberOfShares"
+                    placeholder="Enter Number of Shares"
+                    required
+                    className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                 </div>
               </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="font-bold text-lg text-gray-700">
+                    Membership Charge <span className="text-red-600">*</span>{" "}
+                  </label>
+                  <input
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    type="text"
+                    name="membershipCharge"
+                    required
+                    placeholder="Enter Membership Charge"
+                    className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                  />
+                  {/* <span className="error">{getError.post}</span> */}
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="font-bold text-lg text-gray-700">
+                    Promotor <span className="text-red-600">*</span>{" "}
+                  </label>
+                  <input
+                    //onBlur={(e) => handleError(e)}
+                    onChange={handleInputChange}
+                    type="text"
+                    name="promotor"
+                    required
+                    placeholder="Enter Promotor Name"
+                    className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                  />
+                  {/* <span className="error">{getError.dist}</span> */}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-y-4 w-full">
+                <div className="flex flex-row gap-24">
+                  <div className="flex flex-col w-2/5">
+                    <label className="font-bold text-lg text-gray-700">
+                      Pay Mode <span className="text-red-600">*</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        onChange={handlePayChange}
+                        type="radio"
+                        name="payMode"
+                        value="cash"
+                      />
+                      <span>Cash</span>
+                      <input
+                        onChange={handlePayChange}
+                        type="radio"
+                        name="payMode"
+                        value="cheque"
+                      />
+                      <span>Cheque</span>
+                      <input
+                        onChange={handlePayChange}
+                        type="radio"
+                        name="payMode"
+                        value="onlinetran"
+                      />
+                      <span>Online Tr.</span>
+                    </div>
+                  </div>
+
+                  {getpaymode.payMode === "cash" ? (
+                    <></>
+                  ) : (
+                    <div className="mt-4">
+                      <label className="font-bold text-lg text-gray-700">
+                        Bank Name
+                      </label>
+                      <select
+                        onChange={handlePayChange}
+                        name="selectedBank"
+                        value={payment.selectedBank}
+                        className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                      >
+                        <option value="">Select a bank</option>
+                        {banks.map((bank) => (
+                          <option key={bank._id} value={bank.bankname}>
+                            {bank.bankname}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            <table>
-              <tr>
-                <td>
-                  Share Purchase amount<span>*</span>
-                </td>
-                <td>
-                  <input
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => {
-                      setf(e);
-                      pay(e);
-                    }}
-                    type="number"
-                    name="shareamount"
-                    required
-                  />
-                </td>
-                <td>
-                  No. of Share<span>*</span>
-                </td>
-                <td>
-                  <input
-                    onChange={(e) => setf(e)}
-                    type="number"
-                    name="numberofshare"
-                    defaultValue={10}
-                    required
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Membership Charge<span>*</span>
-                </td>
-                <input
-                  onBlur={(e) => handleError(e)}
-                  onChange={(e) => {
-                    setf(e);
-                    pay(e);
-                    setm(e);
-                  }}
-                  type="number"
-                  name="membershipamount"
-                  min="0"
-                  required
-                />
-                <td>
-                  promotor<span>*</span>
-                </td>
-                <input type="text" required />
-              </tr>
-            </table>
           </div>
+
           <div className="flex gap-0 items-end self-end justify-end mb-20 mr-44 mt-16">
             <input
               onClick={() => {
-                //FIXME - Functionality
+                window.location.reload();
               }}
               type="button"
               value="CANCEL"
               className=" justify-end cursor-pointer  self-end items-end mr-12 tracking-wider  text-gray-500 text-xl leading-loose font-bold"
             />
-            <input
-              onClick={() => {
-                //LINK - SUBMIT
-                window.location.reload();
-              }}
-              type="button"
-              value="SUBMIT"
+            <button
+              type="submit"
               className="bg-red-600 cursor-pointer tracking-wider font-bold w-fit justify-end self-end items-end rounded-lg shadow-xl text-gray-50 px-6 py-1.5 text-xl"
-            />
+            >
+              CREATE
+            </button>
           </div>
         </form>
       </>

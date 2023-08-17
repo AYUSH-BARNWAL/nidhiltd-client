@@ -6,7 +6,7 @@ const CashBook = () => {
   useEffect(() => {
     getallpaisa().then((data) => {
       data.forEach((element) => {
-        // console.log(new Date(element.transactiondate).toLocaleDateString());
+        console.log(new Date(element.transactiondate).toLocaleDateString());
         element.transactiondate = new Date(
           element.transactiondate
         ).toLocaleDateString();
@@ -16,10 +16,10 @@ const CashBook = () => {
   }, []);
   const getallpaisa = async () => {
     let response = await getCash();
-    //response.data.forEach(element => {
-    //   element.transactiondate=element.transactiondate.toLocaleDateString();
-    // });
-    //setpaisa(response.data)
+    response.data.forEach((element) => {
+      element.transactiondate = element.transactiondate.toLocaleDateString();
+    });
+    setpaisa(response.data);
     return response.data;
   };
   const Line = () => {

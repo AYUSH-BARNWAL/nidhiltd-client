@@ -4,7 +4,6 @@ import {
   addChequeOnline,
   getaccount,
   getCash,
-  getChequeOnline,
 } from "../../API/api";
 import Withdraw from "./WithdrawType";
 import NavbarWithCTAButton from "../NavBar/NavBar";
@@ -27,7 +26,7 @@ const Update = () => {
 
   useEffect(() => {
     if (getError) {
-      if (getdata.transactiontype != "") {
+      if (getdata.transactiontype !== "") {
         console.log("from useEffect");
         getError.transactiontype = "";
       }
@@ -74,7 +73,7 @@ const Update = () => {
     setdata(get);
     console.log("hii from payment");
     console.log(get);
-    if (getpaymode.payMode == "cash") {
+    if (getpaymode.payMode === "cash") {
       let b = Object.assign(get, getpaymode);
       console.log(b);
 
@@ -103,14 +102,14 @@ const Update = () => {
     console.log(getpaymode.companyaccount);
 
     console.log(
-      account.find((o) => o.companyaccount == getpaymode.companyaccount)
+      account.find((o) => o.companyaccount === getpaymode.companyaccount)
         .bankname
     );
   }
 
   const handleError = (e) => {
-    if (e.target.name == "transactiontype") {
-      if (getdata.transactiontype == "") {
+    if (e.target.name === "transactiontype") {
+      if (getdata.transactiontype === "") {
         let a = "please select transaction type";
         setError({ ...getError, [e.target.name]: a });
         console.log(e.target.name);
@@ -118,9 +117,9 @@ const Update = () => {
       } else {
         setError({ ...getError, [e.target.name]: "" });
       }
-    } else if (e.target.name == "accountnumber") {
+    } else if (e.target.name === "accountnumber") {
       let p = /^[0-9]{9,18}$/;
-      if (getdata.accountnumber == "") {
+      if (getdata.accountnumber === "") {
         let a = "account number required";
         setError({ ...getError, [e.target.name]: a });
       } else if (!p.test(e.target.value)) {
@@ -128,20 +127,8 @@ const Update = () => {
       } else {
         setError({ ...getError, [e.target.name]: "" });
       }
-    }
-
-    // else if(e.targent.name=="member")
-    // {
-    //   if(e.target.value=="")
-    //   {
-    //     setError({...getError,[e.target.name]:"member number is required"});
-    //   }
-    //   else{
-    //     setError({...getError,[e.target.name]:""});
-    //   }
-    // }
-    else if (e.target.name == "amount") {
-      if (e.target.value == "") {
+    } else if (e.target.name === "amount") {
+      if (e.target.value === "") {
         console.log("empty");
         setError({ ...getError, [e.target.name]: "enter amount" });
       } else if (e.target.value < 1) {
@@ -157,8 +144,6 @@ const Update = () => {
   const Line = () => {
     return <div className="w-11/12 mx-auto h-[1.5px] my-10 bg-gray-400" />;
   };
-
-  //NOTE - jefiopej
 
   return (
     <div>
@@ -247,7 +232,7 @@ const Update = () => {
                     onChange={(e) => getinput(e)}
                     className="box transF i3 rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                     type="number"
-                    placeholder="account no...."
+                    placeholder="Enter Account Number"
                     minLength={13}
                     maxLength={13}
                     required

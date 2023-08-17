@@ -1,18 +1,54 @@
 import { useState } from "react";
 import NavbarWithCTAButton from "../NavBar/NavBar";
 import { addpromotors } from "../../API/api";
+import { toast } from "react-toastify";
 
 const Motor = () => {
-  const [getpro, setpro] = useState({});
   const [getError, setError] = useState({});
-  const promotors = (e) => {
-    console.log(e.target.value);
-    setpro({ ...getpro, [e.target.name]: e.target.value });
+  const [proFormData, setProFormData] = useState({
+    gender: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    dob: "",
+    fatherName: "",
+    motherName: "",
+    email: "",
+    mobile: "",
+    aadhar: "",
+    pan: "",
+    voter: "",
+    ration: "",
+    martial: "",
+    area: "",
+    Landmark: "",
+    post: "",
+    dist: "",
+    state: "",
+    spouse: "",
+    pincode: "",
+    totalShareValue: "",
+    shareNominalHold: "",
+    allotmentDate: "",
+    firstDistinctionNumber: "",
+    lastDistinctionNumber: "",
+    shareNominalValue: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addpromotors(proFormData);
+      toast.success("Account Created Successfully");
+      await window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const submit = () => {
-    console.log(getpro);
-    addpromotors(getpro);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleError = (e) => {
@@ -56,7 +92,7 @@ const Motor = () => {
         setError({ ...getError, [e.target.name]: "" });
       }
     } else if (e.target.name === "email") {
-      let p = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      let p = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
       if (e.target.value === "") {
         setError({ ...getError, [e.target.name]: "enter email" });
       } else if (!p.test(e.target.value)) {
@@ -67,8 +103,8 @@ const Motor = () => {
       } else {
         setError({ ...getError, [e.target.name]: "" });
       }
-    } else if (e.target.name === "number") {
-      let p = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    } else if (e.target.name === "text") {
+      let p = /^[+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
       if (e.target.value === "") {
         setError({ ...getError, [e.target.name]: "enter phone number" });
       } else if (!p.test(e.target.value)) {
@@ -164,7 +200,7 @@ const Motor = () => {
           Promotor
         </h1>
         <Line />
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleSubmit}>
           <div className="flex flex-row w-11/12 mx-auto">
             <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
               Account
@@ -177,16 +213,17 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                   >
                     {" "}
-                    First Name<span>*</span>
+                    First Name<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
+                    placeholder="Enter First Name"
+                    value={proFormData.firstName}
                     type="text"
                     name="firstName"
                     required
-                    pattern="[a-zA-Z]{2}"
+                    // pattern="[a-zA-Z]{2}"
                   />
                   <span className="error">{getError.firstName}</span>
                 </div>
@@ -196,9 +233,11 @@ const Motor = () => {
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="middleName"
+                    placeholder="Enter Middle Name"
+                    value={proFormData.middleName}
                   />
                 </div>
               </div>
@@ -208,15 +247,17 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="lastnames"
                   >
-                    Last Name<span>*</span>
+                    Last Name<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
+                    placeholder="Enter Last Name"
+                    value={proFormData.lastName}
                     type="text"
                     name="lastName"
                     required
+                    // pattern="[a-zA-Z]{2}"
                   />
                   <span className="error">{getError.lastName}</span>
                 </div>
@@ -224,14 +265,15 @@ const Motor = () => {
                   <label
                     id="genders"
                     className="font-bold text-lg text-gray-700"
+                    value={proFormData.gender}
+                    onChange={handleInputChange}
                   >
-                    Gender<span>*</span>
+                    Gender<span className="text-red-600">*</span>
                   </label>
                   <div className="flex flex-row gap-x-2">
                     <input
-                      defaultChecked
                       className="pro"
-                      onChange={(e) => promotors(e)}
+                      onChange={handleInputChange}
                       type="radio"
                       name="gender"
                       value="male"
@@ -241,7 +283,7 @@ const Motor = () => {
                     <label className="ra">M</label>
                     <input
                       className="pro"
-                      onChange={(e) => promotors(e)}
+                      onChange={handleInputChange}
                       type="radio"
                       name="gender"
                       value="female"
@@ -251,7 +293,7 @@ const Motor = () => {
                     <label className="ra">F</label>
                     <input
                       className="pro"
-                      onChange={(e) => promotors(e)}
+                      onChange={handleInputChange}
                       type="radio"
                       name="gender"
                       value="trans"
@@ -263,59 +305,58 @@ const Motor = () => {
               </div>
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
-                  <label
-                    className="laa font-bold text-lg text-gray-700"
-                    id="dobs"
-                  >
-                    Date of Birth<span>*</span>
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Date of Birth<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="date"
-                    name="DOB"
+                    name="dob"
                     required
                   />
                   <span className="error">{getError.DOB}</span>
                 </div>
                 <div className="flex flex-col w-2/5">
                   <label
-                    id="martials"
                     className="font-bold text-lg text-gray-700"
+                    value={proFormData.martial}
+                    onChange={handleInputChange}
                   >
-                    Marital status<span>*</span>
+                    Marital status<span className="text-red-600">*</span>
                   </label>
                   <div className="flex flex-row gap-2">
                     <input
                       className="pro"
-                      onChange={(e) => promotors(e)}
+                      onChange={handleInputChange}
                       type="radio"
-                      name="martialstatus"
+                      name="martial"
                       value="married"
                       required
                     />
                     <label>married</label>
                     <input
                       className="pro"
-                      onChange={(e) => promotors(e)}
+                      onChange={handleInputChange}
                       type="radio"
-                      name="martialstatus"
+                      name="martial"
                       value="unmarried"
                       required
                     />
                     <label>unmarried</label>
                   </div>
 
-                  {getpro.martialstatus === "married" ? (
+                  {proFormData.martial === "married" ? (
                     <>
                       <label className=" font-bold text-lg text-gray-700">
-                        Spouse Name<span>*</span>
+                        Spouse Name<span className="text-red-600">*</span>
                       </label>
                       <input
                         className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                        onChange={(e) => promotors(e)}
+                        onChange={handleInputChange}
                         type="text"
+                        placeholder="Enter Spouse Name"
+                        value={proFormData.spouse}
                         name="spouse"
                         required
                       />
@@ -331,15 +372,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="fathernames"
                   >
-                    Father Name<span>*</span>
+                    Father Name<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="fatherName"
                     required
+                    placeholder="Enter Father Name"
+                    value={proFormData.fatherName}
                     pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                   />
                   <span className="error">{getError.fatherName}</span>
@@ -349,15 +391,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="mothernames"
                   >
-                    Mother Name<span>*</span>
+                    Mother Name<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="motherName"
-                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                    placeholder="Enter Mother Name"
+                    value={proFormData.motherName}
+                    // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                     required
                   />
                   <span className="error">{getError.motherName}</span>
@@ -377,14 +420,15 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="emails"
                   >
-                    email<span>*</span>
+                    email<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="email"
                     name="email"
+                    placeholder="Enter email"
+                    value={proFormData.email}
                     required
                   />
                   <span className="error">{getError.email}</span>
@@ -394,15 +438,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="mobiles"
                   >
-                    Mobile<span>*</span>
+                    Mobile<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
-                    type="number"
-                    name="number"
-                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
+                    onChange={handleInputChange}
+                    type="text"
+                    name="mobile"
+                    placeholder="Enter Mobile"
+                    value={proFormData.mobile}
+                    // pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
                     required
                   />
                   <span className="error">{getError.number}</span>
@@ -410,19 +455,17 @@ const Motor = () => {
               </div>
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
-                  <label
-                    className="laa font-bold text-lg text-gray-700"
-                    id="aadhars"
-                  >
-                    Aadhar NO.<span>*</span>
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Aadhar NO.<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
-                    type="number"
+                    onChange={handleInputChange}
+                    type="text"
                     name="aadhar"
-                    pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
+                    placeholder="Enter Aadhar"
+                    value={proFormData.aadhar}
+                    // pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
                     required
                   />
                   <span className="error">{getError.aadhar}</span>
@@ -432,15 +475,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="pans"
                   >
-                    Pan No.<span>*</span>
+                    Pan No.<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
                     name="pan"
-                    pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
+                    placeholder="Enter Pan number"
+                    value={proFormData.pan}
+                    // pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
                     required
                   />
                   <span className="error">{getError.pan}</span>
@@ -452,15 +496,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="voters"
                   >
-                    voter id.<span>*</span>
+                    voter id.<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.voter}
+                    placeholder="Enter voter id"
                     name="voter"
-                    pattern="^([a-zA-Z]){3}([0-9]){7}?$"
+                    // pattern="^([a-zA-Z]){3}([0-9]){7}?$"
                     required
                   />
                   <span className="error">{getError.voter}</span>
@@ -470,15 +515,16 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="rations"
                   >
-                    Ration No.<span>*</span>
+                    Ration No.<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.ration}
+                    placeholder="Enter ration number"
                     name="ration"
-                    pattern="^([a-zA-Z0-9]){8,12}\s*$"
+                    // pattern="^([a-zA-Z0-9]){8,12}\s*$"
                     required
                   />
                   <span className="error">{getError.ration}</span>
@@ -495,14 +541,15 @@ const Motor = () => {
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    Areal Locality<span>*</span>:
+                    Areal Locality<span className="text-red-600">*</span>:
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
-                    name="areal"
+                    name="area"
+                    value={proFormData.area}
+                    placeholder="Enter Areal Locality"
                     required
                   />
                   <span className="error">{getError.areal}</span>
@@ -513,9 +560,10 @@ const Motor = () => {
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.landmark}
+                    placeholder="Enter Land Mark"
                     name="Landmark"
                     required
                   />
@@ -525,13 +573,14 @@ const Motor = () => {
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    Post<span>*</span>
+                    Post<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.post}
+                    placeholder="Enter Post"
                     name="post"
                     required
                   />
@@ -539,13 +588,14 @@ const Motor = () => {
                 </div>
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    District<span>*</span>
+                    District<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.dist}
+                    placeholder="Enter District"
                     name="dist"
                     required
                   />
@@ -555,13 +605,14 @@ const Motor = () => {
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    State<span>*</span>
+                    State<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
+                    onChange={handleInputChange}
                     type="text"
+                    value={proFormData.state}
+                    placeholder="Enter State"
                     name="state"
                     required
                   />
@@ -569,15 +620,16 @@ const Motor = () => {
                 </div>
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    Pin Code<span>*</span>
+                    Pin Code<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
-                    onBlur={(e) => handleError(e)}
-                    onChange={(e) => promotors(e)}
-                    type="number"
+                    onChange={handleInputChange}
+                    type="text"
                     name="pincode"
-                    pattern="^[1-9]{1}\d{2}\s?\d{3}$"
+                    value={proFormData.pincode}
+                    placeholder="Enter Pin Code"
+                    // pattern="^[1-9]{1}\d{2}\s?\d{3}$"
                     required
                   />
                   <span className="error">{getError.pincode}</span>
@@ -585,22 +637,127 @@ const Motor = () => {
               </div>
             </div>
           </div>
+          <Line />
+          <div className="flex flex-row w-11/12 mx-auto">
+            <p className="text-xl font-bold text-gray-900 w-1/3 text-left">
+              Share Holding Details
+            </p>
+            <div className="flex flex-col gap-10 w-full">
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Allotment Date<span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="Date"
+                    value={proFormData.allotmentDate}
+                    placeholder="Enter Allotment Date"
+                    name="allotmentDate"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Share Nominal Value<span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={proFormData.shareNominalValue}
+                    placeholder="Enter Share Nominal Value"
+                    name="shareNominalValue"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Total Share Value (in Rs.)
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={proFormData.totalShareValue}
+                    placeholder="Enter Total Share Value"
+                    name="totalShareValue"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Share Nominal Hold<span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={
+                      (proFormData.shareNominalHold =
+                        proFormData.totalShareValue /
+                        proFormData.shareNominalValue)
+                    }
+                    name="shareNominalHold"
+                    required
+                    // disabled
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    First Distinction Number
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={proFormData.firstDistinctionNumber}
+                    placeholder="First Distinction Number"
+                    name="firstDistinctionNumber"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col w-2/5">
+                  <label className="laa font-bold text-lg text-gray-700">
+                    Last Distinction Number
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={proFormData.lastDistinctionNumber}
+                    placeholder="Last Distinction Number"
+                    name="lastDistinctionNumber"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="flex gap-0 items-end self-end justify-end mb-20  mr-44 mt-16">
             <input
-              onClick={() => {}}
+              onClick={() => {
+                window.location.reload();
+              }}
               type="button"
               value="CANCEL"
               className=" justify-end cursor-pointer  self-end items-end mr-12 tracking-wider  text-gray-500 text-xl leading-loose font-bold"
             />
-            <input
-              onClick={() => {
-                submit();
-                window.location.reload();
-              }}
-              type="button"
-              value="SUBMIT"
+            <button
+              type="submit"
               className="bg-red-600 cursor-pointer tracking-wider font-bold w-fit justify-end self-end items-end rounded-lg shadow-xl text-gray-50 px-6 py-1.5 text-xl"
-            />
+            >
+              CREATE
+            </button>
           </div>
         </form>
       </>

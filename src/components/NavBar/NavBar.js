@@ -13,15 +13,10 @@ const NavBar = () => {
     set();
   }, []);
   const set = async () => {
-    console.log("option clicked");
     const account = await getaccount();
 
     setA(account.data);
   };
-  // const load = () => {
-  //   window.location.reload();
-  //   return;
-  // };
 
   const navigate = useNavigate();
 
@@ -88,9 +83,6 @@ const NavBar = () => {
       <Navbar.Toggle />
 
       <Navbar.Collapse>
-        {/* <Navbar.Link active href="#">
-          <p className="text-lg text-gray-600 font-bold">Home</p>
-        </Navbar.Link> */}
         <Navbar.Link href="/member">
           <p className="text-lg text-gray-50">Member</p>
         </Navbar.Link>
@@ -109,7 +101,7 @@ const NavBar = () => {
         <Navbar.Link href="/bankbook">
           <p className="text-lg text-gray-50">Bank Book</p>
         </Navbar.Link>
-        <div class="group inline-block relative"></div>
+        <div className="group inline-block relative"></div>
       </Navbar.Collapse>
     </Navbar>
   );
