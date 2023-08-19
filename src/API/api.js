@@ -1,12 +1,14 @@
 import axios from "axios";
-
 const baseURL = "http://localhost:8000";
-// const baseURL = "https://bankserver-hao5.onrender.com";
 
 const instance = axios.create({
   baseURL,
 });
 
+const token = localStorage.getItem("jwtToken");
+if (token) {
+  instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
 export const addCash = async (data) => {
   try {
     const response = await instance.post("/cash", data);

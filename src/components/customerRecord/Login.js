@@ -2,18 +2,42 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get the login function from AuthContext
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const { email1, password1 } = event.target.elements;
 
-    if (email1.value === "ayush@gmail.com" && password1.value === "ayush@123") {
+    const userData = {
+      email: email1.value,
+      password: password1.value,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("jwtToken", data.token);
+      login(userData);
+      console.log("User logged in:", userData);
       navigate("/member");
-    } else {
-      toast.error("Invalid email or password");
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login failed. Please check your credentials.");
     }
   };
   return (

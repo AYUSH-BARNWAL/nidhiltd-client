@@ -7,21 +7,26 @@ import { useState, useEffect } from "react";
 import { Dropdown as DropdownFB } from "flowbite-react";
 
 const NavBar = () => {
+  const token = localStorage.getItem("jwtToken");
+  // console.log("NAVBAR TOKEN ", token);
   // eslint-disable-next-line no-unused-vars
   const [getA, setA] = useState([]);
   useEffect(() => {
     set();
   }, []);
   const set = async () => {
-    const account = await getaccount();
-
-    setA(account.data);
+    try {
+      const account = await getaccount(token); // Pass the token to the API call
+      setA(account.data);
+    } catch (error) {
+      console.error("Error fetching account data:", error);
+    }
   };
 
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    localStorage.removeItem("jwtToken"); // Remove token on logout
     navigate("/");
   };
 

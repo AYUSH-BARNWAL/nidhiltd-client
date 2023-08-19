@@ -38,7 +38,16 @@ const Motor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addpromotors(proFormData);
+      const token = localStorage.getItem("jwtToken");
+
+      // Add the token to the headers for the API call
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      await addpromotors(proFormData, config); // Pass the token in the config object
       toast.success("Account Created Successfully");
       await window.location.reload();
     } catch (error) {
