@@ -18,13 +18,16 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        "https://nidhiltd-server.vercel.app/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Login failed");
@@ -34,7 +37,7 @@ const Login = () => {
       localStorage.setItem("jwtToken", data.token);
       login(userData);
       console.log("User logged in:", userData);
-      navigate("/member");
+      navigate("/promotors");
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login failed. Please check your credentials.");

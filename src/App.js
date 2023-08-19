@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext"; // Adjust the path as per your project structure
 import Login from "./components/customerRecord/Login";
 import Member from "./components/customerRecord/member";
@@ -16,11 +16,11 @@ import "react-toastify/dist/ReactToastify.css";
 // Custom Route Guard component
 const AuthGuard = ({ element }) => {
   const { isAuthenticated } = useAuth();
-  console.log("Kya authenticated hai??  ", isAuthenticated);
+  // console.log("Kya authenticated hai??  ", isAuthenticated);
 
   if (!isAuthenticated) {
-    console.log("Not authenticated on changing routes");
-    // return <Navigate to="/" />;
+    // console.log("Not authenticated on changing routes");
+    return <Navigate to="/" />;
   }
 
   return element;

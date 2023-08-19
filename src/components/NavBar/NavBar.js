@@ -88,24 +88,24 @@ const NavBar = () => {
       <Navbar.Toggle />
 
       <Navbar.Collapse>
-        <Navbar.Link href="/member">
+        {/* <Navbar.Link href="/member">
           <p className="text-lg text-gray-50">Member</p>
-        </Navbar.Link>
+        </Navbar.Link> */}
         <Navbar.Link href="/promotors">
           <p className="text-lg text-gray-50">Promoters</p>
         </Navbar.Link>
-        <Navbar.Link href="/transaction">
+        {/* <Navbar.Link href="/transaction">
           <p className="text-lg text-gray-50">Transaction</p>
-        </Navbar.Link>
+        </Navbar.Link> */}
         <Navbar.Link href="/accopeningform">
-          <p className="text-lg text-gray-50">New Account</p>
+          <p className="text-lg text-gray-50">New Bank Account</p>
         </Navbar.Link>
-        <Navbar.Link href="/cashbook">
+        {/* <Navbar.Link href="/cashbook">
           <p className="text-lg text-gray-50">Cash Book</p>
-        </Navbar.Link>
-        <Navbar.Link href="/bankbook">
+        </Navbar.Link> */}
+        {/* <Navbar.Link href="/bankbook">
           <p className="text-lg text-gray-50">Bank Book</p>
-        </Navbar.Link>
+        </Navbar.Link> */}
         <div className="group inline-block relative"></div>
       </Navbar.Collapse>
     </Navbar>
