@@ -1,5 +1,6 @@
 import axios from "axios";
 const baseURL = "https://nidhiltd-server.vercel.app/";
+// const baseURL = "http://localhost:8000";
 
 const instance = axios.create({
   baseURL,
@@ -119,9 +120,8 @@ export const account = async (data) => {
 export const getaccount = async () => {
   try {
     const response = await instance.get("/getaccount");
-    return response.data;
+    return await response.data;
   } catch (error) {
-    console.error("Error while calling getaccount API:", error);
-    throw error;
+    console.log("get account error: ", error);
   }
 };
