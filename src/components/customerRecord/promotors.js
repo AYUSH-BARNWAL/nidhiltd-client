@@ -38,16 +38,16 @@ const Motor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("jwtToken");
+      // const token = localStorage.getItem("jwtToken");
 
-      // Add the token to the headers for the API call
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      // // Add the token to the headers for the API call
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // };
 
-      await addpromotors(proFormData, config); // Pass the token in the config object
+      await addpromotors(proFormData); // Pass the token in the config object
       toast.success("Account Created Successfully");
       await window.location.reload();
     } catch (error) {
@@ -391,7 +391,7 @@ const Motor = () => {
                     required
                     placeholder="Enter Father Name"
                     value={proFormData.fatherName}
-                    pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
+                    // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                   />
                   <span className="error">{getError.fatherName}</span>
                 </div>
