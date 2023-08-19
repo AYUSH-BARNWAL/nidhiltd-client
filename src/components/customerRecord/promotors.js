@@ -64,7 +64,7 @@ const Motor = () => {
     if (e.target.name === "firstName" || e.target.name === "lastName") {
       let p = /[a-zA-Z]{2,10}/;
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: " name required" });
+        setError({ ...getError, [e.target.name]: "name required" });
         console.log(getError.firstName);
         console.log("null value");
       } else if (!p.test(e.target.value)) {
@@ -117,15 +117,15 @@ const Motor = () => {
       if (e.target.value === "") {
         setError({ ...getError, [e.target.name]: "enter phone number" });
       } else if (!p.test(e.target.value)) {
-        setError({ ...getError, [e.target.name]: "enter valid mobile no." });
+        setError({ ...getError, [e.target.name]: "enter valid mobile Number" });
       }
     } else if (e.target.name === "aadhar") {
       let p = /^[1-9]{1}\d{3}\d{4}\d{4}$/;
 
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: "enter aadhaar no." });
+        setError({ ...getError, [e.target.name]: "enter aadhaar Number" });
       } else if (!p.test(e.target.value)) {
-        setError({ ...getError, [e.target.name]: "enter valid aadhar no." });
+        setError({ ...getError, [e.target.name]: "enter valid aadhar Number" });
       } else {
         setError({ ...getError, [e.target.name]: "" });
       }
@@ -133,9 +133,9 @@ const Motor = () => {
       let p = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
 
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: "enter pan no." });
+        setError({ ...getError, [e.target.name]: "enter pan Number" });
       } else if (!p.test(e.target.value)) {
-        setError({ ...getError, [e.target.name]: "enter valid pan no." });
+        setError({ ...getError, [e.target.name]: "enter valid pan Number" });
       } else {
         setError({ ...getError, [e.target.name]: "" });
       }
@@ -151,11 +151,11 @@ const Motor = () => {
     } else if (e.target.name === "ration") {
       let p = /^([a-zA-Z0-9]){8,12}\s*$/;
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: "enter ration card no." });
+        setError({ ...getError, [e.target.name]: "enter ration card Number" });
       } else if (!p.test(e.target.value)) {
         setError({
           ...getError,
-          [e.target.name]: "enter valid ration card no.",
+          [e.target.name]: "enter valid ration card Number",
         });
       } else {
         setError({ ...getError, [e.target.name]: "" });
@@ -429,7 +429,7 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="emails"
                   >
-                    email<span className="text-red-600">*</span>
+                    Email<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
@@ -465,7 +465,7 @@ const Motor = () => {
               <div className="flex flex-row gap-24">
                 <div className="flex flex-col w-2/5">
                   <label className="laa font-bold text-lg text-gray-700">
-                    Aadhar NO.<span className="text-red-600">*</span>
+                    Aadhar Number.<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
@@ -484,7 +484,7 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="pans"
                   >
-                    Pan No.<span className="text-red-600">*</span>
+                    Pan Number<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
@@ -505,7 +505,7 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="voters"
                   >
-                    voter id.<span className="text-red-600">*</span>
+                    Voter ID Number<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
@@ -524,7 +524,7 @@ const Motor = () => {
                     className="laa font-bold text-lg text-gray-700"
                     id="rations"
                   >
-                    Ration No.<span className="text-red-600">*</span>
+                    Ration Number<span className="text-red-600">*</span>
                   </label>
                   <input
                     className="pro rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
@@ -676,7 +676,7 @@ const Motor = () => {
                     onChange={handleInputChange}
                     type="text"
                     value={proFormData.shareNominalValue}
-                    placeholder="Enter Share Nominal Value"
+                    placeholder="0"
                     name="shareNominalValue"
                     required
                   />
@@ -693,7 +693,7 @@ const Motor = () => {
                     onChange={handleInputChange}
                     type="text"
                     value={proFormData.totalShareValue}
-                    placeholder="Enter Total Share Value"
+                    placeholder="0"
                     name="totalShareValue"
                     required
                   />
@@ -708,12 +708,16 @@ const Motor = () => {
                     type="text"
                     value={
                       (proFormData.shareNominalHold =
-                        proFormData.totalShareValue /
-                        proFormData.shareNominalValue)
+                        proFormData.totalShareValue &&
+                        proFormData.shareNominalValue
+                          ? proFormData.totalShareValue /
+                            proFormData.shareNominalValue
+                          : 0)
                     }
                     name="shareNominalHold"
                     required
-                    // disabled
+                    disabled
+                    placeholder="Share Nominal Hold"
                   />
                 </div>
               </div>
