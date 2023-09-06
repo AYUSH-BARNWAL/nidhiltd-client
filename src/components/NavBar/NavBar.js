@@ -20,6 +20,7 @@ const NavBar = () => {
       setA(account.data);
     } catch (error) {
       console.error("Error fetching account data:", error);
+      await navigate("/");
     }
   };
 
@@ -88,9 +89,9 @@ const NavBar = () => {
       <Navbar.Toggle />
 
       <Navbar.Collapse>
-        {/* <Navbar.Link href="/member">
+        <Navbar.Link href="/member">
           <p className="text-lg text-gray-50">Member</p>
-        </Navbar.Link> */}
+        </Navbar.Link>
         <Navbar.Link href="/promotors">
           <p className="text-lg text-gray-50">Promoters</p>
         </Navbar.Link>
@@ -100,12 +101,12 @@ const NavBar = () => {
         <Navbar.Link href="/accopeningform">
           <p className="text-lg text-gray-50">New Bank Account</p>
         </Navbar.Link>
-        {/* <Navbar.Link href="/cashbook">
+        <Navbar.Link href="/cashbook">
           <p className="text-lg text-gray-50">Cash Book</p>
-        </Navbar.Link> */}
-        {/* <Navbar.Link href="/bankbook">
+        </Navbar.Link>
+        <Navbar.Link href="/bankbook">
           <p className="text-lg text-gray-50">Bank Book</p>
-        </Navbar.Link> */}
+        </Navbar.Link>
         <div className="group inline-block relative"></div>
       </Navbar.Collapse>
     </Navbar>

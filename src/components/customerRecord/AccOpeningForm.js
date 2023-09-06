@@ -21,7 +21,9 @@ const AccOpeningForm = () => {
     try {
       await account(accFormData);
       toast.success("Account Created Successfully");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     } catch (error) {
       console.log(error);
     }

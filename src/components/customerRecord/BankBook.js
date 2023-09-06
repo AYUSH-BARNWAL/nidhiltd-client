@@ -1,7 +1,5 @@
 import { getChequeOnline, getaccount } from "../../API/api.js";
 import { useState, useEffect } from "react";
-// import { Dropdown } from "rsuite";
-// import { Link } from "react-router-dom";
 import NavbarWithCTAButton from "../NavBar/NavBar";
 
 const BankBook = () => {
@@ -17,7 +15,6 @@ const BankBook = () => {
 
   useEffect(() => {
     allaccounts();
-
     getAllCash().then((data) => {
       data.forEach((element) => {
         element.transactiondate = new Date(
@@ -30,9 +27,9 @@ const BankBook = () => {
 
   const getAllCash = async () => {
     let response = await getChequeOnline();
+    console.log(response);
 
-    return response.data;
-    //setcash(response.data);s
+    return response;
   };
   const Line = () => {
     return <div className="w-full mx-auto h-[1.5px] my-5 bg-gray-400" />;

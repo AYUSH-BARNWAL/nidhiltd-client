@@ -36,10 +36,10 @@ const Login = () => {
       const data = await response.json();
       localStorage.setItem("jwtToken", data.token);
       login(userData);
-      console.log("User logged in:", userData);
+      // console.log("User logged in:", userData);
       navigate("/promotors");
     } catch (error) {
-      console.error("Login error:", error);
+      console.log("Login error:", error);
       toast.error("Login failed. Please check your credentials.");
     }
   };

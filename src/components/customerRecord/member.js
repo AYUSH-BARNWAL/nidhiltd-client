@@ -20,7 +20,7 @@ const Member = () => {
   const [banks, setBanks] = useState([]);
 
   const [personal, setPersonal] = useState({
-    membership: "",
+    membershipnumber: "",
     title: "",
     firstName: "",
     middleName: "",
@@ -73,18 +73,43 @@ const Member = () => {
   });
 
   const [payment, setPayment] = useState({
+    membershipnumber: "",
     selectedBank: "",
-    sharePurchaseAmount: "",
-    membershipCharge: "",
+    sharePurchaseAmount: "10",
+    membershipCharge: "25",
     promotor: "",
     numberOfShares: "",
+    payMode: "cash",
+    BankName: "",
+    total: "",
+  });
+
+  const [cash, setCash] = useState({
+    accountnumber: "",
+    amount: "",
+    transactiondate: Date.now(),
+    shareamount: null,
+    membershipamount: "",
+    membershipnumber: "",
+  });
+
+  const [chequeOnline, setChequeOnline] = useState({
+    accountnumber: "",
+    amount: "",
+    transactiondate: "",
+    paymode: "",
+    particular: "",
+    balance: "0",
+    shareamount: "",
+    membershipamount: "",
+    membershipnumber: "",
+    member: "",
   });
 
   useEffect(() => {
-    console.log("Fetching banks...");
     getaccount()
       .then((res) => {
-        console.log("Bank data fetched:", res);
+        // console.log("Bank data fetched:", res);
         setBanks(res);
       })
       .catch((err) => {
@@ -118,7 +143,7 @@ const Member = () => {
     if (e.target.name === "firstName" || e.target.name === "lastName") {
       let p = /[a-zA-Z]{2,10}/;
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: " name required" });
+        setError({ ...getError, [e.target.name]: " name //required" });
         console.log(getError.firstName);
         console.log("null value");
       } else if (!p.test(e.target.value)) {
@@ -141,7 +166,7 @@ const Member = () => {
     } else if (e.target.name === "father" || e.target.name === "mother") {
       let p = /^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$/;
       if (e.target.value === "") {
-        setError({ ...getError, [e.target.name]: "name required" });
+        setError({ ...getError, [e.target.name]: "name //required" });
       } else if (!p.test(e.target.value)) {
         setError({
           ...getError,
@@ -252,30 +277,60 @@ const Member = () => {
     e.preventDefault();
     try {
       await addPersonal(personal);
-      // if (getpaymode.payMode === "cash") {
-      //   await addCash(paymodenumber);
-      // } else {
-      //   await addChequeOnline(paymodenumber);
-      // }
+      await membership(payment);
+      if (payment.payMode === "cash") {
+        await addCash(cash);
+      } else {
+        await addChequeOnline(cash);
+      }
       toast.success("Account Created Successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
-    // window.location.reload();
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPersonal((prevData) => ({ ...prevData, [name]: value }));
-    console.log(personal);
   };
 
-  const handlePayChange = (e) => {
-    setpaymode({ payMode: e.target.value });
+  const handlePayChange = async (e) => {
     const { name, value } = e.target;
     setPayment((prevData) => ({ ...prevData, [name]: value }));
-    console.log(payment);
+    if (name === "payMode") setpaymode({ payMode: value });
   };
+  const handleCashChange = async (e) => {
+    const { name, value } = e.target;
+    setCash((prevData) => ({ ...prevData, [name]: value }));
+  };
+  // useEffect(() => {
+  //   console.log(payment);
+  // }, [payment]);
+  // useEffect(() => {
+  //   console.log(personal);
+  // }, [personal]);
+  // useEffect(() => {
+  //   console.log(getpaymode);
+  // }, [getpaymode]);
+  // useEffect(() => {
+  //   console.log(cash);
+  // }, [cash]);
+
+  const [membershipNumber, setMembershipNumber] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      const memNo = await getmembershipNo();
+      if (memNo) setMembershipNumber(memNo.membershipnumber);
+      else setMembershipNumber(0);
+      console.log(membershipNumber);
+    }
+
+    fetchData();
+  }, []);
 
   const Line = () => {
     return <div className="w-11/12 mx-auto h-[1.5px] my-10 bg-gray-400" />;
@@ -303,9 +358,15 @@ const Member = () => {
                   </label>
                   <input
                     type="text"
-                    value={personal.membershipnumber}
+                    value={
+                      (personal.membershipnumber =
+                        payment.membershipnumber =
+                        cash.membershipnumber =
+                        chequeOnline.membershipnumber =
+                          membershipNumber + 1)
+                    }
                     name="membershipnumber"
-                    onChange={handleInputChange}
+                    disabled
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                 </div>
@@ -325,7 +386,7 @@ const Member = () => {
                     type="radio"
                     name="title"
                     className="translate-y-2 mx-1 ml-3 scale-90"
-                    required
+                    ////required
                   />
                   <label className="text-xl font-bold text-gray-700">Mr.</label>
                   <input
@@ -334,7 +395,7 @@ const Member = () => {
                     name="title"
                     className="translate-y-2 mx-1 ml-3 scale-90"
                     value="ms"
-                    required
+                    //required
                   />
                   <label className="text-xl font-bold text-gray-700">Ms.</label>
                 </div>
@@ -350,7 +411,7 @@ const Member = () => {
                     type="text"
                     name="firstName"
                     // pattern="[a-zA-Z]{2}"
-                    required
+                    //required
                     value={personal.firstName}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -381,7 +442,7 @@ const Member = () => {
                     name="lastName"
                     value={personal.lastName}
                     //onBlur={(e) => handleError(e)}
-                    required
+                    //required
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                   <span className="error text-red-600">{getError.IFSC}</span>
@@ -396,7 +457,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="date"
                     name="birth"
-                    required
+                    //required
                     value={personal.birth}
                     className="rounded-md bg-slate-300 text-gray-700 cursor-pointer font-semibold"
                   />
@@ -413,7 +474,7 @@ const Member = () => {
                     // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                     type="text"
                     name="father"
-                    required
+                    //required
                     value={personal.father}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -429,7 +490,7 @@ const Member = () => {
                     // pattern="^([a-zA-Zà-úÀ-Ú]{2,})+\s+([a-zA-Zà-úÀ-Ú\s]{2,})+$"
                     type="text"
                     name="mother"
-                    required
+                    //required
                     value={personal.mother}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -451,7 +512,7 @@ const Member = () => {
                     type="radio"
                     name="gender"
                     value="Male"
-                    required
+                    //required
                     className="translate-y-2 mx-1 ml-3 scale-90"
                   />
                   <label className="text-xl font-bold text-gray-700">
@@ -462,7 +523,7 @@ const Member = () => {
                     type="radio"
                     name="gender"
                     value="Female"
-                    required
+                    //required
                     className="translate-y-2 mx-1 ml-3 scale-90"
                   />
                   <label className="text-xl font-bold text-gray-700">
@@ -473,7 +534,7 @@ const Member = () => {
                     type="radio"
                     name="gender"
                     value="Transgender"
-                    required
+                    //required
                     className="translate-y-2 mx-1 ml-3 scale-90"
                   />
                   <label className="text-xl font-bold text-gray-700">
@@ -546,7 +607,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="email"
                     name="email"
-                    required
+                    //required
                     value={personal.email}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -562,7 +623,7 @@ const Member = () => {
                     // pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
                     type="tel"
                     name="phone"
-                    required
+                    //required
                     value={personal.phone}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -580,7 +641,7 @@ const Member = () => {
                     // pattern="^[1-9]{1}\d{3}\d{4}\d{4}$"
                     type="number"
                     name="aadhar"
-                    required
+                    //required
                     value={personal.aadhar}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -596,7 +657,7 @@ const Member = () => {
                     // pattern="^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$"
                     type="text"
                     name="pan"
-                    required
+                    //required
                     value={personal.pan}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -615,7 +676,7 @@ const Member = () => {
                     type="text"
                     name="voter"
                     id=""
-                    required
+                    //required
                     value={personal.voter}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -631,7 +692,7 @@ const Member = () => {
                     pattern="^([a-zA-Z0-9]){8,12}\s*$"
                     type="Number"
                     name="ration"
-                    required
+                    //required
                     value={personal.ration}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -656,7 +717,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="text"
                     name="area"
-                    required
+                    //required
                     value={personal.area}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -685,7 +746,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="text"
                     name="post"
-                    required
+                    //required
                     value={personal.post}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -700,7 +761,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="text"
                     name="dist"
-                    required
+                    //required
                     value={personal.dist}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -717,7 +778,7 @@ const Member = () => {
                     onChange={handleInputChange}
                     type="text"
                     name="state"
-                    required
+                    //required
                     value={personal.state}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -733,7 +794,7 @@ const Member = () => {
                     // pattern="^[1-9]{1}\d{2}\s?\d{3}$"
                     type="text"
                     name="pincode"
-                    required
+                    //required
                     value={personal.pincode}
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -1146,10 +1207,11 @@ const Member = () => {
                   </label>
                   <input
                     //onBlur={(e) => handleError(e)}
-                    onChange={handleInputChange}
+                    onChange={handlePayChange}
                     type="text"
                     name="sharePurchaseAmount"
-                    required
+                    //required
+                    value={payment.sharePurchaseAmount}
                     placeholder="Enter Share Purchase Amount"
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -1160,11 +1222,12 @@ const Member = () => {
                     Number of Shares <span className="text-red-600">*</span>
                   </label>
                   <input
-                    onChange={handleInputChange}
+                    onChange={handlePayChange}
                     type="text"
                     name="numberOfShares"
+                    value={payment.numberOfShares}
                     placeholder="Enter Number of Shares"
-                    required
+                    //required
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
                 </div>
@@ -1176,10 +1239,11 @@ const Member = () => {
                   </label>
                   <input
                     //onBlur={(e) => handleError(e)}
-                    onChange={handleInputChange}
+                    onChange={handlePayChange}
                     type="text"
                     name="membershipCharge"
-                    required
+                    //required
+                    value={payment.membershipCharge}
                     placeholder="Enter Membership Charge"
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -1191,10 +1255,11 @@ const Member = () => {
                   </label>
                   <input
                     //onBlur={(e) => handleError(e)}
-                    onChange={handleInputChange}
+                    onChange={handlePayChange}
                     type="text"
                     name="promotor"
-                    required
+                    //required
+                    value={payment.promotor}
                     placeholder="Enter Promotor Name"
                     className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                   />
@@ -1208,32 +1273,34 @@ const Member = () => {
                     <label className="font-bold text-lg text-gray-700">
                       Pay Mode <span className="text-red-600">*</span>
                     </label>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <input
                         onChange={handlePayChange}
                         type="radio"
                         name="payMode"
                         value="cash"
+                        defaultChecked
                       />
-                      <span>Cash</span>
+                      <span className="mr-3">Cash</span>
                       <input
                         onChange={handlePayChange}
                         type="radio"
                         name="payMode"
                         value="cheque"
                       />
-                      <span>Cheque</span>
+                      <span className="mr-3">Cheque</span>
                       <input
                         onChange={handlePayChange}
                         type="radio"
                         name="payMode"
-                        value="onlinetran"
+                        value="onlineTransaction"
                       />
-                      <span>Online Tr.</span>
+                      <span>Online</span>
                     </div>
                   </div>
 
-                  {getpaymode.payMode === "cash" ? (
+                  {getpaymode.payMode === "cash" ||
+                  getpaymode.payMode === "cheque" ? (
                     <></>
                   ) : (
                     <div className="mt-4">
@@ -1246,7 +1313,9 @@ const Member = () => {
                         value={payment.selectedBank}
                         className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
                       >
-                        <option value="">Select a bank</option>
+                        <option value="" disabled>
+                          Select a bank
+                        </option>
                         {banks.map((bank) => (
                           <option key={bank._id} value={bank.bankname}>
                             {bank.bankname}
@@ -1255,6 +1324,34 @@ const Member = () => {
                       </select>
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="flex flex-row gap-24">
+                <div className="flex flex-col w-2/5">
+                  <label className="font-bold text-lg text-gray-700">
+                    Total Amount Payable <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    //onBlur={(e) => handleError(e)}
+                    onChange={(e) => {
+                      handlePayChange(e);
+                      handleCashChange(e);
+                    }}
+                    type="text"
+                    name="total"
+                    //required
+                    value={
+                      (payment.total =
+                        cash.amount =
+                        chequeOnline.amount =
+                          parseInt(
+                            payment.sharePurchaseAmount * payment.numberOfShares
+                          ) + parseInt(payment.membershipCharge))
+                    }
+                    placeholder="Enter Share Purchase Amount"
+                    className="rounded-md bg-slate-300 w-full text-gray-700 cursor-pointer font-semibold"
+                  />
+                  {/* <span className="error">{getError.areal}</span> */}
                 </div>
               </div>
             </div>

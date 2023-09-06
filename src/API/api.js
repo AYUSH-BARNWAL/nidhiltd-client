@@ -15,8 +15,9 @@ export const addCash = async (data) => {
     const response = await instance.post("/cash", data);
     return response.data;
   } catch (error) {
-    console.error("Error while calling addCash API:", error);
-    throw error; // Rethrow the error for the caller to handle
+    console.error("Error while calling addCash API:", error.message);
+    console.log(JSON.stringify(error));
+    throw error;
   }
 };
 
@@ -26,6 +27,7 @@ export const addChequeOnline = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error while calling addChequeOnline API:", error);
+    console.log(error.message);
     throw error;
   }
 };
@@ -56,16 +58,6 @@ export const addPersonal = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error while calling addPersonal API:", error);
-    throw error;
-  }
-};
-
-export const addFinnacial = async (data) => {
-  try {
-    const response = await instance.post("/finnacial", data);
-    return response.data;
-  } catch (error) {
-    console.error("Error while calling addFinnacial API:", error);
     throw error;
   }
 };

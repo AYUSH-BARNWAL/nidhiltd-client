@@ -15,13 +15,27 @@ const CashBook = () => {
     });
   }, []);
   const getallpaisa = async () => {
-    let response = await getCash();
-    response.data.forEach((element) => {
-      element.transactiondate = element.transactiondate.toLocaleDateString();
-    });
-    setpaisa(response.data);
-    return response.data;
+    try {
+      let response = await getCash();
+      console.log(response);
+
+      // Ensure transactiondate is a Date object before formatting
+      const formattedData = response.map((element) => {
+        if (element.transactiondate instanceof Date) {
+          element.transactiondate =
+            element.transactiondate.toLocaleDateString();
+        }
+        return element;
+      });
+
+      setpaisa(formattedData);
+      return formattedData;
+    } catch (error) {
+      console.error("Error while fetching and formatting data:", error);
+      throw error;
+    }
   };
+
   const Line = () => {
     return <div className="w-full mx-auto h-[1.5px] my-5 bg-gray-400" />;
   };

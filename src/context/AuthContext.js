@@ -4,17 +4,6 @@ import React, { createContext, useState, useContext } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // const [user, setUser] = useState(null);
-  // const isAuthenticated = !!user;
-  // console.log("isAuthenticated:", isAuthenticated);
-
-  // const login = (userData) => {
-  //   setUser(userData);
-  // };
-
-  // const logout = () => {
-  //   setUser(null);
-  // };
   const token = localStorage.getItem("jwtToken");
   const [user, setUser] = useState(token ? true : null); // Check if token exists
 

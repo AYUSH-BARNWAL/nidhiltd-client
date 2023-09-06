@@ -19,11 +19,11 @@ const AuthGuard = ({ element }) => {
   // console.log("Kya authenticated hai??  ", isAuthenticated);
 
   if (!isAuthenticated) {
-    // console.log("Not authenticated on changing routes");
     return <Navigate to="/" />;
   }
-
-  return element;
+  if (isAuthenticated) {
+    return element;
+  }
 };
 
 const App = () => {

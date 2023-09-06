@@ -48,8 +48,10 @@ const Motor = () => {
       // };
 
       await addpromotors(proFormData); // Pass the token in the config object
-      toast.success("Account Created Successfully");
-      await window.location.reload();
+      toast.success("Account Created Successfully. Reloading...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     } catch (error) {
       console.log(error);
     }
